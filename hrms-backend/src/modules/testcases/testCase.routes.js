@@ -7,7 +7,7 @@ const {
   createTestCase,
   getAllTestCases,
   getTestCaseById,
-} = require('./testcase.controller');
+} = require('./testCase.controller');
 
 router.post('/', auth, role(['ADMIN', 'QA']), createTestCase);
 router.get('/', auth, role(['ADMIN', 'QA']), getAllTestCases);
