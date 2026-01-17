@@ -1,0 +1,4 @@
+ALTER TABLE employees
+ADD COLUMN bank_account VARCHAR(30),
+ADD COLUMN ifsc VARCHAR(15),
+ADD COLUMN bank_name VARCHAR(50);
