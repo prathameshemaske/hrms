@@ -6,7 +6,7 @@ const pool = new Pool({
   ssl: {
     rejectUnauthorized: false
   },
-  connectionTimeoutMillis: 5000, // 5 second timeout to prevent hangs
+  connectionTimeoutMillis: 10000, // 10 second timeout for cross-region stability
 });
 
 pool.on('error', (err) => {
