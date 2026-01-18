@@ -6,9 +6,9 @@ const pool = new Pool({
   ssl: {
     rejectUnauthorized: false
   },
-  connectionTimeoutMillis: 30000,
-  idleTimeoutMillis: 30000,
-  max: 10,
+  connectionTimeoutMillis: 10000,
+  idleTimeoutMillis: 1000, // Close idle connections almost immediately
+  max: 1, // Test with 1 connection to see if saturation is the issue
 });
 
 pool.on('error', (err) => {
