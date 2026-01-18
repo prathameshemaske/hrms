@@ -23,10 +23,17 @@ app.get('/', (req, res) => {
 // Database health check
 app.get('/api/health-db', async (req, res) => {
   try {
+    console.log('Attempting DB connection check...');
     const result = await pool.query('SELECT NOW()');
     res.json({ status: 'connected', time: result.rows[0].now });
   } catch (err) {
-    res.status(500).json({ status: 'error', message: err.message });
+    console.error('Database Health Check Failed:', err);
+    res.status(500).json({
+      status: 'error',
+      message: err.message || 'Unknown database error',
+      code: err.code,
+      detail: err.detail
+    });
   }
 });
 
