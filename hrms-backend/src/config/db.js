@@ -6,11 +6,16 @@ const pool = new Pool({
   ssl: {
     rejectUnauthorized: false
   },
-  connectionTimeoutMillis: 10000, // 10 second timeout for cross-region stability
+  connectionTimeoutMillis: 20000, // 20 seconds for production stability
+  idleTimeoutMillis: 30000,
+  max: 20,
 });
 
 pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
+  console.error('Unexpected pool error:', err);
 });
+
+// Proactive test
+pool.query('SELECT 1').then(() => console.log('✅ DB Pool initialized')).catch(e => console.error('❌ DB Pool error:', e));
 
 module.exports = pool;
