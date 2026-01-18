@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const pool = require('./config/db'); // Added missing pool import
 
 // =======================
 // Middleware
@@ -17,6 +18,16 @@ app.use(express.json());
 // Health check
 app.get('/', (req, res) => {
   res.send('HRMS Backend is running');
+});
+
+// Database health check
+app.get('/api/health-db', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.json({ status: 'connected', time: result.rows[0].now });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
 });
 
 // =======================
@@ -98,5 +109,15 @@ app.use('/api/tasks', require('./modules/tasks/tasks.routes'));
 
 app.use("/api/tasks/workspaces", require("./modules/tasks/workspaces.routes"));
 
+// =======================
+// Global Error Handler
+// =======================
+app.use((err, req, res, next) => {
+  console.error('Server Error:', err.stack);
+  res.status(500).json({
+    message: 'Internal Server Error',
+    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
 
 module.exports = app;
